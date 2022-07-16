@@ -12,6 +12,9 @@
         <li class="nav-item">
           <a class="nav-link" href="right.php">Right</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="uas.php">UAS</a>
+        </li>
       </ul>
     </div>
   </div>
