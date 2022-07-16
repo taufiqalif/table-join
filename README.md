@@ -23,3 +23,15 @@
 ![uas-03.png](img/uas-03.png)
 
 ![uas-02.png](img/uas-02.png)
+
+membuat trigger update
+
+![uas-05.png](img/uas-05.png)
+
+![uas-06.png](img/uas-06.png)
+
+![uas-07.png](img/uas-07.png)
+
+![uas-08.png](img/uas-08.png)
+
+![uas-09.png](img/uas-09.png)
