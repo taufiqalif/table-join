@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 16, 2022 at 02:21 PM
+-- Generation Time: Jul 16, 2022 at 04:52 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.0.13
 
@@ -50,6 +50,18 @@ INSERT INTO `buku` (`buku_isbn`, `buku_judul`, `penerbit_id`, `buku_tglterbit`, 
 ('666-96771-2-1', 'Cara Belajar Cepat PHP 6', 'PB08', '2008-11-21', 230, '35000', 'DAR', 4, '15'),
 ('777-76723-5-0', 'Membuat Aplikasi Web dengan ASP', 'PB07', '2010-06-02', 600, '95000', 'ERD', 5, '24'),
 ('979-96446-9-0', 'Menguasai SQL', NULL, NULL, NULL, NULL, 'ERK', 6, '10');
+
+--
+-- Triggers `buku`
+--
+DELIMITER $$
+CREATE TRIGGER `updt_stok` AFTER UPDATE ON `buku` FOR EACH ROW BEGIN
+IF OLD.stok <> NEW.stok THEN
+INSERT INTO log_stok_buku VALUES('','NEW.judul_buku','OLD.stok','NEW.stok','NOW()','NEW.buku_isbn');
+END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -117,6 +129,28 @@ INSERT INTO `link_buku_pengarang` (`buku_isbn`, `pengarang_id`) VALUES
 ('666-96771-2-0', 'ERD'),
 ('666-96771-2-0', 'ERK'),
 ('666-96771-2-0', 'FDY');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log_stok_buku`
+--
+
+CREATE TABLE `log_stok_buku` (
+  `id_updt` int(11) NOT NULL,
+  `judul_buku` varchar(75) DEFAULT NULL,
+  `stok_lama` varchar(50) DEFAULT NULL,
+  `stok_baru` varchar(50) DEFAULT NULL,
+  `tgl_update` date DEFAULT NULL,
+  `buku_isbn` char(13) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `log_stok_buku`
+--
+
+INSERT INTO `log_stok_buku` (`id_updt`, `judul_buku`, `stok_lama`, `stok_baru`, `tgl_update`, `buku_isbn`) VALUES
+(1, 'Mudah Belajar Photoshop', '20', '60', '2022-07-16', '222-34222-1-0');
 
 -- --------------------------------------------------------
 
@@ -205,6 +239,13 @@ ALTER TABLE `link_buku_pengarang`
   ADD KEY `pengarang_id` (`pengarang_id`);
 
 --
+-- Indexes for table `log_stok_buku`
+--
+ALTER TABLE `log_stok_buku`
+  ADD PRIMARY KEY (`id_updt`),
+  ADD KEY `buku_isbn` (`buku_isbn`);
+
+--
 -- Indexes for table `penerbit`
 --
 ALTER TABLE `penerbit`
@@ -225,6 +266,12 @@ ALTER TABLE `pengarang`
 --
 ALTER TABLE `kategori`
   MODIFY `kategori_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `log_stok_buku`
+--
+ALTER TABLE `log_stok_buku`
+  MODIFY `id_updt` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -249,6 +296,12 @@ ALTER TABLE `link_buku_kategori`
 ALTER TABLE `link_buku_pengarang`
   ADD CONSTRAINT `link_buku_pengarang_ibfk_1` FOREIGN KEY (`buku_isbn`) REFERENCES `buku` (`buku_isbn`),
   ADD CONSTRAINT `link_buku_pengarang_ibfk_2` FOREIGN KEY (`pengarang_id`) REFERENCES `pengarang` (`pengarang_id`);
+
+--
+-- Constraints for table `log_stok_buku`
+--
+ALTER TABLE `log_stok_buku`
+  ADD CONSTRAINT `log_stok_buku_ibfk_1` FOREIGN KEY (`buku_isbn`) REFERENCES `buku` (`buku_isbn`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
