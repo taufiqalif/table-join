@@ -15,9 +15,6 @@ A.pengarang_id=B.pengarang_id AND
 A.penerbit_id=C.penerbit_id ORDER
 BY buku_isbn ASC ");
 
-
-
-
 ?>
 
 
